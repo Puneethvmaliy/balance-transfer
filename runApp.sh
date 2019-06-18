@@ -39,15 +39,15 @@ function restartNetwork() {
 	dkrm
 
    #Cleanup the stores
-	# rm -rf ./fabric-client-kv-org*
+	rm -rf ./fabric-client-kv-*
   
-	# generateCerts
-  # replacePrivateKey
-  # generateChannelArtifacts
+	generateCerts
+  replacePrivateKey
+  generateChannelArtifacts
 
   
 	#Start the network
-	# docker-compose -f ./docker-compose.yaml up -d
+	docker-compose -f ./docker-compose.yaml up -d
 	echo
 }
 
@@ -81,7 +81,7 @@ function generateCerts() {
   fi
   echo
 }
-CHANNEL_NAME="mychannel"
+CHANNEL_NAME="bankchannel"
 # Generate orderer genesis block and channel configuration transaction with configtxgen
 function generateChannelArtifacts() {
   which configtxgen
@@ -91,8 +91,8 @@ function generateChannelArtifacts() {
   fi
   rm -Rf ./crypto-config/genesis.block
   rm -Rf ./crypto-config/$CHANNEL_NAME.tx
-  rm -Rf ./crypto-config/Org1MSPanchors.tx
-  rm -Rf ./crypto-config/Org2MSPanchors.tx
+  rm -Rf ./crypto-config/Bank1MSPanchors.tx
+  rm -Rf ./crypto-config/Bank2MSPanchors.tx
   echo "#########  Generating Orderer Genesis block ##############"
   configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./crypto-config/genesis.block
   res=$?
@@ -102,7 +102,7 @@ function generateChannelArtifacts() {
   fi
   echo
   echo "### Generating channel configuration transaction 'channel.tx' ###"
-  configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./crypto-config/mychannel.tx -channelID $CHANNEL_NAME
+  configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./crypto-config/bankchannel.tx -channelID $CHANNEL_NAME
   res=$?
   if [ $res -ne 0 ]; then
     echo "Failed to generate channel configuration transaction..."
@@ -114,7 +114,7 @@ function generateChannelArtifacts() {
   echo "#######    Generating anchor peer update for Org1MSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./crypto-config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./crypto-config/Bank1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Bank1MSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -127,7 +127,7 @@ function generateChannelArtifacts() {
   echo "#######    Generating anchor peer update for Org2MSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./crypto-config/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
+  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./crypto-config/Bank2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Bank2MSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -154,13 +154,13 @@ function replacePrivateKey() {
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
   CURRENT_DIR=$PWD
-  cd ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/
+  cd ./crypto-config/peerOrganizations/bank1.co.in/users/Admin@bank1.co.in/msp/keystore/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/ORG1_PRIVATE_KEY/${PRIV_KEY}/g" network-config.yaml
 
   CURRENT_DIR=$PWD
-  cd ./crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/
+  cd ./crypto-config/peerOrganizations/bank2.azure.com/users/Admin@bank2.azure.com/msp/keystore/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/ORG2_PRIVATE_KEY/${PRIV_KEY}/g" network-config.yaml
@@ -170,14 +170,14 @@ function replacePrivateKey() {
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
   CURRENT_DIR=$PWD
-  cd ./crypto-config/peerOrganizations/org1.example.com/ca/
+  cd ./crypto-config/peerOrganizations/bank1.co.in/ca/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml
 
 
   CURRENT_DIR=$PWD
-  cd ./crypto-config/peerOrganizations/org2.example.com/ca/
+  cd ./crypto-config/peerOrganizations/bank2.azure.com/ca/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml

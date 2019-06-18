@@ -312,7 +312,7 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', async function(req, 
 	logger.debug('==================== QUERY BY CHAINCODE ==================');
 	var channelName = req.params.channelName;
 	var chaincodeName = req.params.chaincodeName;
-	let args = req.body.args;
+	let args = req.query.args;
 	let fcn = req.query.fcn;
 	let peer = req.query.peer;
 

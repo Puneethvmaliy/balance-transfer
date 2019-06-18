@@ -7,136 +7,136 @@ version: '2'
 
 services:
 
-  ca.org1.example.com:
+  ca.bank1.co.in:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-org1
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/410fa5760a277e9549501040cf3c5bc60ad96e83943d357030bc1fbe26dfd9a2_sk
+      - FABRIC_CA_SERVER_CA_NAME=ca-bank1
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.bank1.co.in-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/f296c70910f026e6b948f3acca954f0b861b5bc80030ba99c19359105774dedb_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/410fa5760a277e9549501040cf3c5bc60ad96e83943d357030bc1fbe26dfd9a2_sk
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.bank1.co.in-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/f296c70910f026e6b948f3acca954f0b861b5bc80030ba99c19359105774dedb_sk
     ports:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peerOrg1
+      - ./crypto-config/peerOrganizations/bank1.co.in/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerBank1
 
-  ca.org2.example.com:
+  ca.bank2.azure.com:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-org2
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/0d8050dd5d2f1514ce8b545a572f9c5b4f69d14c7686d84309b24a3e7890e0c4_sk
+      - FABRIC_CA_SERVER_CA_NAME=ca-bank2
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.bank2.azure.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3f8d77f009d6d70977ab2381013ad1ab5982c3b6d15d1b42a35d72c5a32f8a39_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/0d8050dd5d2f1514ce8b545a572f9c5b4f69d14c7686d84309b24a3e7890e0c4_sk
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.bank2.azure.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3f8d77f009d6d70977ab2381013ad1ab5982c3b6d15d1b42a35d72c5a32f8a39_sk
     ports:
       - "8054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peerOrg2
+      - ./crypto-config/peerOrganizations/bank2.azure.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerBank2
 
-  orderer.example.com:
-    container_name: orderer.example.com
+  puniorderer.example.com:
+    container_name: puniorderer.example.com
     image: hyperledger/fabric-orderer
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/crypto/orderer/msp
+      - ORDERER_GENERAL_LOCALMSPID=PuniOrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/crypto/puniorderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/crypto/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/crypto/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/crypto/orderer/tls/ca.crt, /etc/hyperledger/crypto/peerOrg1/tls/ca.crt, /etc/hyperledger/crypto/peerOrg2/tls/ca.crt]
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/crypto/puniorderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/crypto/puniorderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/crypto/puniorderer/tls/ca.crt, /etc/hyperledger/crypto/peerBank1/tls/ca.crt, /etc/hyperledger/crypto/peerBank2/tls/ca.crt]
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderers
     command: orderer
     ports:
       - 7050:7050
     volumes:
         - ./crypto-config:/etc/hyperledger/configtx
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/crypto/orderer
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peerOrg1
-        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/crypto/peerOrg2
+        - ./crypto-config/ordererOrganizations/example.com/orderers/puniorderer.example.com/:/etc/hyperledger/crypto/puniorderer
+        - ./crypto-config/peerOrganizations/bank1.co.in/peers/peer0.bank1.co.in/:/etc/hyperledger/crypto/peerBank1
+        - ./crypto-config/peerOrganizations/bank2.azure.com/peers/peer0.bank2.azure.com/:/etc/hyperledger/crypto/peerBank2
 
-  peer0.org1.example.com:
-    container_name: peer0.org1.example.com
+  peer0.bank1.co.in:
+    container_name: peer0.bank1.co.in
     extends:
       file:   base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051      
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+      - CORE_PEER_ID=peer0.bank1.co.in
+      - CORE_PEER_LOCALMSPID=Bank1MSP
+      - CORE_PEER_ADDRESS=peer0.bank1.co.in:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.bank1.co.in:7051      
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.bank1.co.in:7051
     ports:
       - 7051:7051
       - 7053:7053
     volumes:
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peer
+        - ./crypto-config/peerOrganizations/bank1.co.in/peers/peer0.bank1.co.in/:/etc/hyperledger/crypto/peer
     depends_on:
-      - orderer.example.com
+      - puniorderer.example.com
 
-  peer1.org1.example.com:
-    container_name: peer1.org1.example.com
+  peer1.bank1.co.in:
+    container_name: peer1.bank1.co.in
     extends:
       file:   base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org1.example.com
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051      
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
+      - CORE_PEER_ID=peer1.bank1.co.in
+      - CORE_PEER_LOCALMSPID=Bank1MSP
+      - CORE_PEER_ADDRESS=peer1.bank1.co.in:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.bank1.co.in:7051      
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.bank1.co.in:7051
     ports:
       - 7056:7051
       - 7058:7053
     volumes:
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/:/etc/hyperledger/crypto/peer
+        - ./crypto-config/peerOrganizations/bank1.co.in/peers/peer1.bank1.co.in/:/etc/hyperledger/crypto/peer
     depends_on:
-      - orderer.example.com
+      - puniorderer.example.com
 
-  peer0.org2.example.com:
-    container_name: peer0.org2.example.com
+  peer0.bank2.azure.com:
+    container_name: peer0.bank2.azure.com
     extends:
       file:   base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org2.example.com
-      - CORE_PEER_LOCALMSPID=Org2MSP
-      - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:7051      
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
+      - CORE_PEER_ID=peer0.bank2.azure.com
+      - CORE_PEER_LOCALMSPID=Bank2MSP
+      - CORE_PEER_ADDRESS=peer0.bank2.azure.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.bank2.azure.com:7051      
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.bank2.azure.com:7051
     ports:
       - 8051:7051
       - 8053:7053
     volumes:
-        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/crypto/peer
+        - ./crypto-config/peerOrganizations/bank2.azure.com/peers/peer0.bank2.azure.com/:/etc/hyperledger/crypto/peer
     depends_on:
-      - orderer.example.com
+      - puniorderer.example.com
 
-  peer1.org2.example.com:
-    container_name: peer1.org2.example.com
+  peer1.bank2.azure.com:
+    container_name: peer1.bank2.azure.com
     extends:
       file:   base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org2.example.com
-      - CORE_PEER_LOCALMSPID=Org2MSP
-      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051      
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
+      - CORE_PEER_ID=peer1.bank2.azure.com
+      - CORE_PEER_LOCALMSPID=Bank2MSP
+      - CORE_PEER_ADDRESS=peer1.bank2.azure.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.bank2.azure.com:7051      
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.bank2.azure.com:7051
     ports:
       - 8056:7051
       - 8058:7053
     volumes:
-        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/:/etc/hyperledger/crypto/peer
+        - ./crypto-config/peerOrganizations/bank2.azure.com/peers/peer1.bank2.azure.com/:/etc/hyperledger/crypto/peer
     depends_on:
-      - orderer.example.com
+      - puniorderer.example.com

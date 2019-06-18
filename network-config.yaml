@@ -38,17 +38,17 @@ version: "1.0"
 #
 channels:
   # name of the channel
-  mychannel:
+  bankchannel:
     # Required. list of orderers designated by the application to use for transactions on this
     # channel. This list can be a result of access control ("org1" can only access "ordererA"), or
     # operational decisions to share loads from applications among the orderers.  The values must
     # be "names" of orgs defined under "organizations/peers"
     orderers:
-      - orderer.example.com
+      - puniorderer.example.com
 
     # Required. list of peers from participating orgs
     peers:
-      peer0.org1.example.com:
+      peer0.bank1.co.in:
         # [Optional]. will this peer be sent transaction proposals for endorsement? The peer must
         # have the chaincode installed. The app can also use this property to decide which peers
         # to send the chaincode install request. Default: true
@@ -68,19 +68,19 @@ channels:
         # Default: true
         eventSource: true
 
-      peer1.org1.example.com:
+      peer1.bank1.co.in:
         endorsingPeer: false
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: false
 
-      peer0.org2.example.com:
+      peer0.bank2.azure.com:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
 
-      peer1.org2.example.com:
+      peer1.bank2.azure.com:
         endorsingPeer: false
         chaincodeQuery: true
         ledgerQuery: true
@@ -91,18 +91,18 @@ channels:
     # this list with the query results of getInstalledChaincodes() and getInstantiatedChaincodes()
     chaincodes:
       # the format follows the "cannonical name" of chaincodes by fabric code
-      - mycc:v0
+      - bankchaincode:v0
 
 #
 # list of participating organizations in this network
 #
 organizations:
   Org1:
-    mspid: Org1MSP
+    mspid: Bank1MSP
 
     peers:
-      - peer0.org1.example.com
-      - peer1.org1.example.com
+      - peer0.bank1.co.in
+      - peer1.bank1.co.in
 
     # [Optional]. Certificate Authorities issue certificates for identification purposes in a Fabric based
     # network. Typically certificates provisioning is done in a separate process outside of the
@@ -110,7 +110,7 @@ organizations:
     # dynamic certificate management (enroll, revoke, re-enroll). The following section is only for
     # Fabric-CA servers.
     certificateAuthorities:
-      - ca-org1
+      - ca-bank1
 
     # [Optional]. If the application is going to make requests that are reserved to organization
     # administrators, including creating/updating channels, installing/instantiating chaincodes, it
@@ -120,9 +120,9 @@ organizations:
     # this way. The SDK should allow applications to set the org admin identity via APIs, and only use
     # this route as an alternative when it exists.
     adminPrivateKey:
-      path: ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/03a78989782898837a54e24889fb1faff2cbb6c783fa6ebb873a60f56ac93abf_sk
+      path: ./crypto-config/peerOrganizations/bank1.co.in/users/Admin@bank1.co.in/msp/keystore/9ab3d7d53c15e07dd08086b9d7fc9ab9b0636eed147e9512eac9bcb85f924313_sk
     signedCert:
-      path: ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+      path: ./crypto-config/peerOrganizations/bank1.co.in/users/Admin@bank1.co.in/msp/signcerts/Admin@bank1.co.in-cert.pem
 
   # the profile will contain public information about organizations other than the one it belongs to.
   # These are necessary information to make transaction lifecycles work, including MSP IDs and
@@ -130,17 +130,17 @@ organizations:
   # information reserved for members of the organization, such as admin key and certificate,
   # fabric-ca registrar enroll ID and secret, etc.
   Org2:
-    mspid: Org2MSP
+    mspid: Bank2MSP
     
     peers:
-      - peer0.org2.example.com
-      - peer1.org2.example.com
+      - peer0.bank2.azure.com
+      - peer1.bank2.azure.com
     certificateAuthorities:
-      - ca-org2
+      - ca-bank2
     adminPrivateKey:
-      path: ./crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/5f6c6ca7507ae099a11874326fe439bc9fcca90a15b702f51e42c4f6c6091377_sk
+      path: ./crypto-config/peerOrganizations/bank2.azure.com/users/Admin@bank2.azure.com/msp/keystore/2b8227b2d84eac3cbbde058dd0cd99ba398ccf5f87e13c33f7b5b05679da509f_sk
     signedCert:
-      path: ./crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+      path: ./crypto-config/peerOrganizations/bank2.azure.com/users/Admin@bank2.azure.com/msp/signcerts/Admin@bank2.azure.com-cert.pem
 
 #
 # List of orderers to send transaction and channel create/update requests to. For the time
@@ -148,52 +148,52 @@ organizations:
 # SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.
 #
 orderers:
-  orderer.example.com:
+  puniorderer.example.com:
     url: grpcs://localhost:7050
 
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
-      ssl-target-name-override: orderer.example.com
+      ssl-target-name-override: puniorderer.example.com
 
     tlsCACerts:
-      path: ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+      path: ./crypto-config/ordererOrganizations/example.com/orderers/puniorderer.example.com/tls/ca.crt
 
 #
 # List of peers to send various requests to, including endorsement, query
 # and event listener registration.
 #
 peers:
-  peer0.org1.example.com:
+  peer0.bank1.co.in:
     # this URL is used to send endorsement and query requests
     url: grpcs://localhost:7051
 
     grpcOptions:
-      ssl-target-name-override: peer0.org1.example.com
+      ssl-target-name-override: peer0.bank1.co.in
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+      path: ./crypto-config/peerOrganizations/bank1.co.in/peers/peer0.bank1.co.in/tls/ca.crt
 
-  peer1.org1.example.com:
+  peer1.bank1.co.in:
     url: grpcs://localhost:7056
     grpcOptions:
-      ssl-target-name-override: peer1.org1.example.com
+      ssl-target-name-override: peer1.bank1.co.in
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
+      path: ./crypto-config/peerOrganizations/bank1.co.in/peers/peer1.bank1.co.in/tls/ca.crt
 
-  peer0.org2.example.com:
+  peer0.bank2.azure.com:
     url: grpcs://localhost:8051
     grpcOptions:
-      ssl-target-name-override: peer0.org2.example.com
+      ssl-target-name-override: peer0.bank2.azure.com
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+      path: ./crypto-config/peerOrganizations/bank2.azure.com/peers/peer0.bank2.azure.com/tls/ca.crt
 
-  peer1.org2.example.com:
+  peer1.bank2.azure.com:
     url: grpcs://localhost:8056
     eventUrl: grpcs://localhost:8058
     grpcOptions:
-      ssl-target-name-override: peer1.org2.example.com
+      ssl-target-name-override: peer1.bank2.azure.com
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
+      path: ./crypto-config/peerOrganizations/bank2.azure.com/peers/peer1.bank2.azure.com/tls/ca.crt
 
 #
 # Fabric-CA is a special kind of Certificate Authority provided by Hyperledger Fabric which allows
@@ -201,14 +201,14 @@ peers:
 # Certificate Authority instead of Fabric-CA, in which case this section would not be specified.
 #
 certificateAuthorities:
-  ca-org1:
+  ca-bank1:
     url: https://localhost:7054
     # the properties specified under this object are passed to the 'http' client verbatim when
     # making the request to the Fabric-CA server
     httpOptions:
       verify: false
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
+      path: ./crypto-config/peerOrganizations/bank1.co.in/ca/ca.bank1.co.in-cert.pem
 
     # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
     # needed to enroll and invoke new users.
@@ -216,16 +216,16 @@ certificateAuthorities:
       - enrollId: admin
         enrollSecret: adminpw
     # [Optional] The optional name of the CA.
-    caName: ca-org1
+    caName: ca-bank1
 
-  ca-org2:
+  ca-bank2:
     url: https://localhost:8054
     httpOptions:
       verify: false
     tlsCACerts:
-      path: ./crypto-config/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
+      path: ./crypto-config/peerOrganizations/bank2.azure.com/ca/ca.bank2.azure.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
     # [Optional] The optional name of the CA.
-    caName: ca-org2
+    caName: ca-bank2

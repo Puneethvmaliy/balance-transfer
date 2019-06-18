@@ -2,8 +2,9 @@
    "host":"localhost",
    "port":"4000",
    "jwt_expiretime": "36000",
-   "channelName":"mychannel",
+   "channelName":"bankchannel",
    "CC_SRC_PATH":"../artifacts",
+   "enableTls": true,
    "eventWaitTime":"30000",
    "admins":[
       {

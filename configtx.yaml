@@ -1,23 +1,23 @@
 Organizations:
     - &OrdererOrg
-        Name: OrdererMSP
-        ID: OrdererMSP
+        Name: PuniOrdererMSP
+        ID: PuniOrdererMSP
         MSPDir: ./crypto-config/ordererOrganizations/example.com/msp
 
     - &Org1
-        Name: Org1MSP
-        ID: Org1MSP
-        MSPDir: ./crypto-config/peerOrganizations/org1.example.com/msp
+        Name: Bank1MSP
+        ID: Bank1MSP
+        MSPDir: ./crypto-config/peerOrganizations/Bank1.co.in/msp
         AnchorPeers:
-            - Host: peer0.org1.example.com
+            - Host: peer0.bank1.co.in
               Port: 7051
 
     - &Org2
-        Name: Org2MSP
-        ID: Org2MSP
-        MSPDir: ./crypto-config/peerOrganizations/org2.example.com/msp
+        Name: Bank2MSP
+        ID: Bank2MSP
+        MSPDir: ./crypto-config/peerOrganizations/Bank2.azure.com/msp
         AnchorPeers:
-            - Host: peer0.org2.example.com
+            - Host: peer0.bank2.azure.com
               Port: 7051
 
 ################################################################################
@@ -43,7 +43,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.example.com:7050
+        - puniorderer.example.com:7050
     BatchTimeout: 2s
     BatchSize:
         MaxMessageCount: 10

@@ -80,6 +80,9 @@ var getRegisteredUser = async function(username, userOrg, isJson) {
 				enrollmentID: username,
 				affiliation: userOrg.toLowerCase() + '.department1'
 			}, adminUserObj);
+			logger.debug("===================secret=================");
+			logger.debug(secret);
+			logger.debug("====================================");
 			logger.debug('Successfully got the secret for user %s',username);
 			user = await client.setUserContext({username:username, password:secret});
 			logger.debug('Successfully enrolled username %s  and setUserContext on the client object', username);

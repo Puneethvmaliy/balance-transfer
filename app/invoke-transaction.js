@@ -51,9 +51,6 @@ const invokeChaincode = async function(peerNames, channelName, chaincodeName, fc
 		};
 
 		let results = await channel.sendTransactionProposal(request,220000);
-		logger.debug("======================================");
-		logger.debug(results);
-		logger.debug("=======================================");
 		// the returned object has both the endorsement results
 		// and the actual proposal, the proposal will be needed
 		// later when we send a transaction to the orderer
